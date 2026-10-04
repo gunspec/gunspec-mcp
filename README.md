@@ -1,6 +1,6 @@
 # GunSpec MCP Server
 
-The hosted [Model Context Protocol](https://modelcontextprotocol.io) server for the [GunSpec firearms API](https://gunspec.io). It gives Claude, Cursor, VS Code, Codex and other MCP clients 40 read-only tools for firearm specifications, manufacturers, calibers, ammunition and attachment compatibility, including what fits a given firearm, computed from its mounting interfaces.
+The hosted [Model Context Protocol](https://modelcontextprotocol.io) server for the [GunSpec firearms API](https://gunspec.io). It gives Claude, Cursor, VS Code, Codex and other MCP clients 44 read-only tools for firearm specifications, manufacturers, calibers, ammunition and attachment compatibility, including what fits a given firearm, computed from its mounting interfaces.
 
 Nothing to install and nothing to run. Point your client at the server and sign in.
 
@@ -54,10 +54,10 @@ Every tool call is an API request made with your key. It counts against your pla
 
 | Plan | Requests per day | MCP calls per day | Tools callable |
 | --- | ---: | ---: | ---: |
-| Explorer | 50 | 20 | 24 of 40 |
-| Builder | 2,000 | 500 | 34 of 40 |
-| Studio | 10,000 | 2,500 | 40 of 40 |
-| Enterprise | 50,000 | 10,000 | 40 of 40 |
+| Explorer | 50 | 20 | 24 of 44 |
+| Builder | 5,000 | 500 | 38 of 44 |
+| Studio | 10,000 | 2,500 | 44 of 44 |
+| Enterprise | 50,000 | 10,000 | 44 of 44 |
 
 A tool your plan does not cover answers with an error naming the plan it needs. Details: [limits](https://docs.gunspec.io/en/mcp/limits), [errors](https://docs.gunspec.io/en/mcp/errors).
 
@@ -90,10 +90,14 @@ Each tool makes one API request. Full arguments and a verified example call for 
 | `gunspec_search_docs` | Searches the GunSpec documentation guides and returns the sections that answer a question, best first, each with a snippet and a link. | `GET /v1/docs/guides/search` | Explorer |
 | `gunspec_similar_firearms` | Returns firearms similar to this one in role, cartridge, size and era. | `GET /v1/firearms/{id}/similar` | Explorer |
 | `gunspec_stats_summary` | Returns the current number of firearms, manufacturers, calibers and categories in the catalog. | `GET /v1/stats/summary` | Explorer |
+| `gunspec_ammo_load` | Returns how much ammunition one to five firearms carry per kilogram: rounds per kilogram of full magazines and how many full magazines fit a weight budget, derived from each firearm's loaded and empty weights, and the estimated mass of a basic load of rounds and magazines from a fitted cartridge-mass model. | `GET /v1/firearms/ammo-load` | Builder |
 | `gunspec_ammunition_ballistics` | Returns velocity, energy, drop and time of flight at a set of distances for one ammunition load, adjusted for barrel length. | `GET /v1/ammunition/{id}/ballistics` | Builder |
 | `gunspec_compare_firearms` | Returns side-by-side specifications for two to five firearms, with the differences calculated. | `GET /v1/firearms/compare` | Builder |
+| `gunspec_firearm_recoil` | Returns the free recoil of one to five firearms firing a load: the velocity each is pushed back at, the energy it takes and the impulse, by the free recoil formula SAAMI publishes, from the firearm's recorded mass and the muzzle velocity its own barrel gives the load. | `GET /v1/firearms/recoil` | Builder |
 | `gunspec_get_firearm` | Returns the full specification of one firearm: dimensions, weight, calibers, action, capacity, years, designer, description, provenance and record version. | `GET /v1/firearms/{id}` | Builder |
 | `gunspec_list_ammunition` | Lists factory loads with bullet weight, bullet type, ballistic coefficient and reference velocity. | `GET /v1/ammunition` | Builder |
+| `gunspec_load_carriage` | Returns the metabolic energy a foot march costs carrying each of one to five firearms, with its magazines and attachments, on top of the other kit carried, by the US Army LCDA equation (Looney et al. | `GET /v1/firearms/load-carriage` | Builder |
+| `gunspec_point_blank_range` | Returns the maximum point-blank range of one to five firearms, the furthest distance the bullet stays within half a target's diameter of the line of sight with no holdover, with the zero that gives it, and how far the bullet stays supersonic. | `GET /v1/firearms/point-blank` | Builder |
 | `gunspec_resolve_firearm` | Resolves one free-text name ("G19 gen 5", "M4A1") to a single firearm id, with a confidence score and alternatives. | `GET /v1/firearms/resolve` | Builder |
 | `gunspec_search_firearms` | Runs a full-text search over the firearm catalog by name, manufacturer, model number or alias. | `GET /v1/firearms/search` | Builder |
 | `gunspec_top_firearms` | Ranks the catalog by one measurable statistic: lightest, heaviest, longest range, highest rate of fire, most compact, highest capacity or most powerful. | `GET /v1/firearms/top` | Builder |
